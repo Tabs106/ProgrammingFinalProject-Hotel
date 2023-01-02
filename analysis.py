@@ -1,1 +1,1 @@
-#by Hassanar Awodipe, Tabatha Correa and Tamsir Jobe
+#by Hassanat Awodipe, Tabatha Correa and Tamsir Jobe
