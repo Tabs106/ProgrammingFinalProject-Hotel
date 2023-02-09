@@ -33,7 +33,6 @@ def change_datatype(bookings):
     bookings['arrival_date'] = pd.to_datetime(bookings['arrival_date'])
     bookings['reservation_status_date'] = pd.to_datetime(bookings['reservation_status_date'])
     bookings['children'] = bookings['children'].astype(int)
- 
     
 def clean_data(bookings):
     fillnull(bookings)
