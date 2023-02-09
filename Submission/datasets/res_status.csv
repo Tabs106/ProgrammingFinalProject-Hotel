@@ -1,0 +1,7 @@
+hotel,reservation_status,size
+Resort Hotel,Check-Out,28938
+Resort Hotel,Canceled,10831
+Resort Hotel,No-Show,291
+City Hotel,Check-Out,46228
+City Hotel,Canceled,32186
+City Hotel,No-Show,916
