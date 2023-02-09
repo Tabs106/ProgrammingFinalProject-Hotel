@@ -50,7 +50,6 @@ class AdrStats:
         plt.savefig(filename)
         plt.close()
                 
-        
     def summary_csv(self, filename):
         adr_stats = self.compute_stats()
         adr_stats.to_csv(filename, index=False)
