@@ -87,6 +87,26 @@ class ReservationStatus:
         reservation_data = self.compute_stats()
         reservation_data.to_csv(filename, index=False)
         
+    def plot_top_countries(df, column_name, title, x_label, y_label):
+        origin_counts = df[column_name].value_counts(dropna=False)
+        sns.barplot(x=origin_counts.index[:10], y=origin_counts.values[:10])
+        plt.xlabel(x_label)
+        plt.ylabel(y_label)
+        plt.title(title)
+        plt.show()
+
+    def plot_families(df):
+        df['total_guests'] = df['adults'] + df['children'] + df['babies']
+        df['families'] = (df['total_guests'] >= 2).astype(int)
+        families_counts = df['families'].value_counts(dropna=False)
+        sns.barplot(x=families_counts.index, y=families_counts.values)
+        plt.xlabel('Family Bookings')
+        plt.ylabel('Number of Bookings')
+        plt.title('Number of Family Bookings')
+        plt.show()   
+
+     
+   
         
 
         
