@@ -3,13 +3,13 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-def plot_top_countries(df, column_name, title, x_label, y_label):
+def plot_top_countries(df, column_name):
     """This function plots the bar plot of the top 10 values of a given column in a DataFrame"""
-    origin_counts = df[column_name].value_counts(dropna=False)
-    sns.barplot(x=origin_counts.index[:10], y=origin_counts.values[:10])
-    plt.xlabel(x_label)
-    plt.ylabel(y_label)
-    plt.title(title)
+    origin_counts = df['country'].value_counts(dropna=False)[:10]
+    sns.barplot(x=origin_counts.index, y=origin_counts.values,color=sns.color_palette()[0])
+    plt.xlabel('Country')
+    plt.ylabel('Number of Guests')
+    plt.title('Top 10 Guests by Country')
     plt.show()
     
 def plot_families(df):
