@@ -87,23 +87,82 @@ class ReservationStatus:
         reservation_data = self.compute_stats()
         reservation_data.to_csv(filename, index=False)
         
-    def plot_top_countries(df, column_name, title, x_label, y_label):
-        origin_counts = df[column_name].value_counts(dropna=False)
-        sns.barplot(x=origin_counts.index[:10], y=origin_counts.values[:10])
-        plt.xlabel(x_label)
-        plt.ylabel(y_label)
-        plt.title(title)
-        plt.show()
+    
+  ##############################  
+    
+class Countries:
+    def __init__(self, hotel_data):
+        self.bookings = hotel_data    
+        
+    def countries_stats(self):
+        origin_counts = self.bookings['countries'].value_counts(dropna=False)[:10].reset_index()
+        
+        # change column name
+        origin_counts.rename(columns={'index':'country', 'country':'count'})
+        return origin_counts
+    
+    def plot_top_countries(self, filename):
+        y = self.countries_stats().index
+        x = self.countries_stats().values
+        ax = sns.barplot(x=x, y=y, color=color)
+        
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+        plt.xlabel()
+        plt.ylabel()
+        plt.title()
+        
+        plt.savefig(filename)
+        plt.close()
+        
+    def summary_csv(self, filename):
+        top_10_countries = self.countries_stats()
+        top_10_countries.to_csv(filename)
 
-    def plot_families(df):
-        df['total_guests'] = df['adults'] + df['children'] + df['babies']
-        df['families'] = (df['total_guests'] >= 2).astype(int)
-        families_counts = df['families'].value_counts(dropna=False)
-        sns.barplot(x=families_counts.index, y=families_counts.values)
-        plt.xlabel('Family Bookings')
-        plt.ylabel('Number of Bookings')
-        plt.title('Number of Family Bookings')
-        plt.show()   
+
+class Families:
+    def __init__(self, hotel_data):
+        self.bookings = hotel_data
+        
+    def families_stats(self):
+        for adults, children, babies in zip(self.bookings['adults'], self.bookings['children'],
+                                            self.bookings['children']):
+            if self.bookings['adults'] > 0 and self.bookings['children'] > 0 and self.bookings['babies'] > 0:
+                self.bookings['families'] = 1
+            elif self.bookings['adults'] > 0 and self.bookings['children'] > 0 and self.bookings['babies'] < 0:
+                 self.bookings['families'] = 1
+            elif self.bookings['adults'] > 0 and self.bookings['children'] < 0 and self.bookings['babies'] > 0:
+                 self.bookings['families'] = 1
+            else:    
+                 self.bookings['families'] = 0
+            
+        families = self.bookings['families'].value_counts()    
+        return families
+
+#         df['total_guests'] = df['adults'] + df['children'] + df['babies']
+#         df['families'] = (df['total_guests'] >= 2).astype(int)
+#         families_counts = df['families'].value_counts(dropna=False)
+
+        
+    def plot_families(self, filename): 
+          
+        # fig, ax = plt.subplots()
+        sizes = self.families_stats()
+        explode = (0, 0.1)
+        ax = plt.pie(sizes, explode=explode, labels=['family', ''], autopct='%1.1f%%',
+                shadow=True, startangle=90)
+        ax.axis('equal')
+        plt.title('')
+        
+        plt.savefig(filename)  
+        plt.close()
+        
+        # sns.barplot(x=families_counts.index, y=families_counts.values)
+        # plt.xlabel('Family Bookings')
+        # plt.ylabel('Number of Bookings')
+        # plt.title('Number of Family Bookings')
+        
+        
 
      
    
