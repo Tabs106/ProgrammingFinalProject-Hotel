@@ -4,7 +4,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 def plot_top_countries(df, column_name):
-    """This function plots the bar plot of the top 10 values of a given column in a DataFrame"""
+    ###This function plots the bar plot of the top 10 values of a given column in a DataFrame#
     origin_counts = df['country'].value_counts(dropna=False)[:10]
     sns.barplot(x=origin_counts.index, y=origin_counts.values,color=sns.color_palette()[0])
     plt.xlabel('Country')
@@ -13,13 +13,20 @@ def plot_top_countries(df, column_name):
     plt.show()
     
 def plot_families(df):
-    df['total_guests'] = df['adults'] + df['children'] + df['babies']
-    df['families'] = (df['total_guests'] >= 2).astype(int)
-    families_counts = df['families'].value_counts(dropna=False)
-    sns.barplot(x=families_counts.index, y=families_counts.values)
-    plt.xlabel('Family Bookings')
-    plt.ylabel('Number of Bookings')
-    plt.title('Number of Family Bookings')
-    plt.show()   
+    def is_family(adults, children, babies):
+        return adults >= 1 and (children >= 1 or babies >= 1)
+
+df['is_family'] = df.apply(lambda row: is_family(row['adults'], row['children'], row['babies']), axis=1)
+
+ families = df['is_family'].sum()
+
+ non_families = df.shape[0] - families
+ values = [families, non_families]
+
+labels = ['Families', 'Non-families']
+ plt.pie(values, labels=labels, autopct='%1.1f%%')
+    plt.axis('equal')
+    plt.show()
+
 
 
