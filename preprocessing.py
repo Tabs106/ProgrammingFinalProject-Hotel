@@ -33,5 +33,5 @@ replace_null(['agent','company','children'])
 new_df = df.dropna()
 
 #saves new data frame into csv file
-new_df.to_csv('hotel_bookings_clean.csv')
+new_df.to_csv('hotel_bookings_clean.csv',index=False)
 
