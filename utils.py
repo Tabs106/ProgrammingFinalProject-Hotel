@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 order = ['City Hotel', 'Resort Hotel']
 color = sns.color_palette()[0]
 
+# Tamsir's codes here #
 
 class AdrStats:
     def __init__(self, hotel_data):
@@ -81,70 +82,4 @@ class ReservationStatus:
         reservation_data = self.compute_stats()
         reservation_data.to_csv(filename, index=False)
 
-
-class CountryStats:
-    def __init__(self, hotel_data):
-        self.bookings = hotel_data
-
-    def countries_stats(self):
-        origin_counts = self.bookings['country'].value_counts(dropna=False)[:10].reset_index()
-
-        # change column name
-        origin_counts.rename(columns={'index': 'country', 'country': 'count'}, inplace=True)
-        return origin_counts
-
-    def plot_top_countries(self, filename):
-        plt.figure(figsize=(8, 6))
-
-        y = self.countries_stats()['country']
-        x = self.countries_stats()['count']
-        ax = sns.barplot(x=x, y=y, color=color)
-
-        ax.spines['top'].set_visible(False)
-        ax.spines['right'].set_visible(False)
-        # plt.xlabel()
-        # plt.ylabel()
-        # plt.title()
-
-        plt.savefig(filename)
-        plt.close()
-
-    def summary_csv(self, filename):
-        top_10_countries = self.countries_stats()
-        top_10_countries.to_csv(filename, index=False)
-
-
-class Families:
-    def __init__(self, hotel_data):
-        self.bookings = hotel_data
-
-    def families_stats(self):
-        is_family = []
-        for adults, children, babies in zip(self.bookings['adults'], self.bookings['children'],
-                                            self.bookings['children']):
-            if (adults > 0) and (children > 0) and (babies > 0):
-                family = 1
-            elif (adults > 0) and (children > 0) and (babies < 0):
-                family = 1
-            elif (adults > 0) and (children < 0) and (babies > 0):
-                family = 1
-            else:
-                family = 0
-            is_family.append(family)
-
-        self.bookings['families'] = is_family
-        families = self.bookings['families'].value_counts()
-
-        return families
-
-    def plot_families(self, filename):
-
-        plt.figure(figsize=(6,6))
-        sizes = self.families_stats()
-        explode = (0, 0.1)
-        plt.pie(sizes, explode=explode, labels=['', 'Family'], autopct='%1.1f%%', shadow=True, startangle=90)
-        plt.title('')
-
-        plt.savefig(filename)
-        plt.close()
-
+# Tabatha's codes here #
