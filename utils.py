@@ -14,17 +14,16 @@ class AdrStats:
     def compute_stats(self):
         len_data = self.bookings.shape[0]
 
-        count_adr_city = self.bookings.groupby('hotel')['adr'].size()[0]
-        count_adr_resort = self.bookings.groupby('hotel')['adr'].size()[1]
+        count_city = self.bookings.groupby('hotel').size()[0]
+        count_resort = self.bookings.groupby('hotel').size()[1]
 
         sum_adr_city = self.bookings.groupby('hotel')['adr'].sum()[0]
         sum_adr_resort = self.bookings.groupby('hotel')['adr'].sum()[1]
 
         adr_stats = self.bookings.groupby('hotel')['adr'].describe().reset_index()
-        adr_stats.loc[[0, 1], 'count'] = [sum_adr_city, sum_adr_resort]
-        adr_stats.loc[[0, 1], 'percentage'] = [str(round((count_adr_city / len_data) * 100, 2)) + '%',
-                                               str(round((count_adr_resort / len_data) * 100, 2)) + '%']
-        adr_stats.rename(columns={'count': 'sum'}, inplace=True)
+        adr_stats.loc[[0, 1], 'percentage'] = [str(round((count_city / len_data) * 100, 2)) + '%',
+                                               str(round((count_resort / len_data) * 100, 2)) + '%']
+        adr_stats.loc[[0, 1], 'sum'] = [sum_adr_city, sum_adr_resort]
 
         return adr_stats
 
