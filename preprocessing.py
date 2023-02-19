@@ -6,8 +6,6 @@
 import pandas as pd
 
 
-#-------------- Functions --------------#
-
 def replace_null(columnNames):
     #Replaces null values in given column to 0
     for c in columnNames:
@@ -19,10 +17,9 @@ def drop_column(columnNames):
         df.drop(columnNames, axis=1, inplace=True)
 
 
-#---------------- Code ----------------#
 
 #reads the csv
-df = pd.read_csv('hotel_bookings_test.csv')
+df = pd.read_csv('hotel_bookings.csv')
 
 #replaces the null values in these columns to 0 as to not remove unintencional rows
 replace_null(['agent','company','children'])
