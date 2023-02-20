@@ -183,7 +183,10 @@ class LengthStats:
         plt.savefig(filename)
         plt.close()
         
+<<<<<<< HEAD:utils.py
 >>>>>>> main
 =======
 # Tabatha's codes here #
 >>>>>>> f49e8656b7b7d6da3e66b54fed29d436601d35eb
+=======
+>>>>>>> main:utilssss.py
