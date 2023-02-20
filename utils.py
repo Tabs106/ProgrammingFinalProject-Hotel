@@ -1,12 +1,16 @@
-<<<<<<< HEAD
+# by Hassanat Awodipe, Tabatha Correa and Tamsir Jobe
+
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+import warnings
 
+warnings.filterwarnings('ignore')
+
+# define plot parameters
 order = ['City Hotel', 'Resort Hotel']
 color = sns.color_palette()[0]
 
-# Tamsir's codes here #
 
 class AdrStats:
     def __init__(self, hotel_data):
@@ -29,7 +33,7 @@ class AdrStats:
         return adr_stats
 
     def plot_fig(self, filename):
-        data_wo = self.bookings.drop(self.bookings[self.bookings['adr'] > 5000].index)
+        data_wo = self.bookings.drop(self.bookings[self.bookings['adr'] > 5000].index)  # remove outlier adr
 
         plt.figure(figsize=(8, 6))
         ax = sns.violinplot(data=data_wo, x='hotel', y='adr', order=order, color=color);
@@ -40,7 +44,6 @@ class AdrStats:
         plt.xlabel('Hotel', fontsize=10)
         plt.ylabel('ADR', fontsize=10)
         plt.title('Distribution of ADR', fontsize=16)
-        plt.title('Distribution of ADR')
 
         plt.savefig(filename)
         plt.close()
@@ -72,6 +75,7 @@ class ReservationStatus:
         ax.spines['top'].set_visible(False)
         ax.spines['right'].set_visible(False)
         ax.spines['left'].set_visible(False)
+        plt.xlabel('Hotel')
         plt.title('Reservation Status', fontsize=16)
         plt.legend(frameon=False)
 
@@ -82,111 +86,91 @@ class ReservationStatus:
         reservation_data = self.compute_stats()
         reservation_data.to_csv(filename, index=False)
 
-<<<<<<< HEAD
-
-class CountryStats:
-    def __init__(self, hotel_data):
-        self.bookings = hotel_data
-
-    def countries_stats(self):
-        origin_counts = self.bookings['country'].value_counts(dropna=False)[:10].reset_index()
-
-        # change column name
-        origin_counts.rename(columns={'index': 'country', 'country': 'count'}, inplace=True)
-        return origin_counts
-
-    def plot_top_countries(self, filename):
-        plt.figure(figsize=(8, 6))
-
-        y = self.countries_stats()['country']
-        x = self.countries_stats()['count']
-        ax = sns.barplot(x=x, y=y, color=color)
-
-        ax.spines['top'].set_visible(False)
-        ax.spines['right'].set_visible(False)
-        # plt.xlabel()
-        # plt.ylabel()
-        # plt.title()
-
-        plt.savefig(filename)
-        plt.close()
-
-    def summary_csv(self, filename):
-        top_10_countries = self.countries_stats()
-        top_10_countries.to_csv(filename, index=False)
-
-
-class Families:
-    def __init__(self, hotel_data):
-        self.bookings = hotel_data
-
-    def families_stats(self):
-        is_family = []
-        for adults, children, babies in zip(self.bookings['adults'], self.bookings['children'],
-                                            self.bookings['children']):
-            if (adults > 0) and (children > 0) and (babies > 0):
-                family = 1
-            elif (adults > 0) and (children > 0) and (babies < 0):
-                family = 1
-            elif (adults > 0) and (children < 0) and (babies > 0):
-                family = 1
-            else:
-                family = 0
-            is_family.append(family)
-
-        self.bookings['families'] = is_family
-        families = self.bookings['families'].value_counts()
-
-        return families
-
-    def plot_families(self, filename):
-
-        plt.figure(figsize=(6,6))
-        sizes = self.families_stats()
-        explode = (0, 0.1)
-        plt.pie(sizes, explode=explode, labels=['', 'Family'], autopct='%1.1f%%', shadow=True, startangle=90)
-        plt.title('')
-
-        plt.savefig(filename)
-        plt.close()
-
-=======
-#by Hassanat Awodipe, Tabatha Correa and Tamsir Jobe
-
-import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
-
-order = ['City Hotel', 'Resort Hotel']
-color = sns.color_palette()[0]
 
 class LengthStats:
     def __init__(self, hotel_data):
         self.bookings = hotel_data
 
     def compute_stats(self):
-        self.bookings['full_length'] = self.bookings['stays_in_weekend_nights']+self.bookings['stays_in_week_nights']
-        length = self.bookings.loc[self.bookings['arrival_date_year'] >= 2016]
+        self.bookings['full_length'] = self.bookings['stays_in_weekend_nights'] + self.bookings['stays_in_week_nights']
+        length = self.bookings.loc[self.bookings['arrival_date'] >= '2016-01-01']
         return length
 
     def plot_fig(self, filename):
-        plt.figure(figsize=(12,6))
+        plt.figure(figsize=(12, 8))
         l_data = self.compute_stats()
+        x = self.bookings['arrival_date'].dt.month
+        ax = sns.lineplot(x=x, y="full_length", hue="hotel", errorbar=None, data=l_data)
 
-        sns.lineplot(x="arrival_date_month", y="full_length",
-            hue="hotel",ci=None,data=l_data);
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+        ax.set_xticks([2, 4, 6, 8, 10, 12], ['Feb', 'Apr', 'Jun', 'Aug', 'Oct', 'Dec'])
 
         plt.xlabel("Month")
-        plt.ylabel("Length of Stay")
-        plt.title("Length of Stay")
+        plt.ylabel("Total number of nights")
+        plt.title("Length of Stay", fontsize=16)
+        plt.legend(frameon=False)
 
         plt.savefig(filename)
         plt.close()
-        
-<<<<<<< HEAD:utils.py
->>>>>>> main
-=======
-# Tabatha's codes here #
->>>>>>> f49e8656b7b7d6da3e66b54fed29d436601d35eb
-=======
->>>>>>> main:utilssss.py
+
+    def summary_csv(self, filename):
+        length_stay_16_17 = self.compute_stats()
+        length_stay_16_17['year'] = length_stay_16_17['arrival_date'].dt.year
+        length_stay_16_17['month'] = length_stay_16_17['arrival_date'].dt.month
+        length_stay_16_17 = length_stay_16_17.groupby(['year', 'hotel', 'month'])['full_length'].mean()
+        length_stay_16_17 = pd.DataFrame(length_stay_16_17).reset_index()
+        length_stay_16_17.to_csv(filename)
+
+
+class Countries:
+    def __init__(self, hotel_data):
+        self.bookings = hotel_data
+
+    def country_stats(self):
+        origin_counts = self.bookings['country'].value_counts(dropna=False)[:10].reset_index()
+        origin_counts.rename(columns={'index': 'country', 'country': 'count'}, inplace=True)
+
+        return origin_counts
+
+    def plot_top_countries(self, filename):
+        y = self.country_stats()['country']
+        x = self.country_stats()['count']
+
+        ax = sns.barplot(x=x, y=y, color=color)
+
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+        plt.ylabel('Country')
+        plt.xlabel('Number of bookings per country')
+        plt.title('Top 10 Countries by Number of Guests', fontsize=16)
+
+        plt.savefig(filename)
+        plt.close()
+
+    def csv_saver(self, filename):
+        origin_counts = self.country_stats()
+        origin_counts.to_csv(filename)
+
+
+class Families:
+    def __init__(self, hotel_data):
+        self.bookings = hotel_data
+
+    def is_family(self, adults, children, babies):
+        return (adults >= 1) & ((children >= 1) | (babies >= 1))
+
+    def plot_families(self, filename):
+        self.bookings['is_family'] = self.bookings.apply(
+            lambda row: self.is_family(row['adults'], row['children'], row['babies']), axis=1)
+
+        families = self.bookings['is_family'].value_counts()
+
+        values = families
+        labels = ['Non-families', 'Families']
+        explode = (0, 0.1)
+        plt.pie(values, explode=explode, labels=labels, shadow=True, startangle=90, autopct='%1.1f%%')
+        plt.title('Pie Chart of Families', fontsize=16)
+
+        plt.savefig(filename)
+        plt.close()

@@ -1,32 +1,51 @@
-<<<<<<< HEAD
+# by Hassanat Awodipe, Tabatha Correa and Tamsir Jobe
+
 import pandas as pd
 import calendar
 
 
 def fillnull(bookings):
+    """ fill null values """
     bookings['children'] = bookings['children'].fillna(0)
+    bookings['agent'] = bookings['agent'].fillna(0)
+    bookings['company'] = bookings['company'].fillna(0)
+
+
+def drop_duplicate(bookings):
+    """ remove duplicated entries """
+    bookings.drop_duplicates(inplace=True)
 
 
 def change_date(bookings):
-    # convert month name of arrival date to number from full month name
+    """ convert month name of arrival date to number from full month name"""
     arrival_month = []
     for month in bookings['arrival_date_month']:
         month_num = list(calendar.month_name).index(month)
         arrival_month.append(month_num)
     bookings['arrival_date_month'] = arrival_month
 
-    # concat the data columns to one
+    # concat the date columns to one
     bookings['arrival_date_year'] = bookings['arrival_date_year'].astype(str) + '-' + bookings[
         'arrival_date_month'].astype(
         str) + '-' + bookings['arrival_date_day_of_month'].astype(str)
 
     # rename arrival date column
     bookings.rename(columns={'arrival_date_year': 'arrival_date'}, inplace=True)
-    bookings = bookings.drop(columns=['arrival_date_week_number', 'arrival_date_month', 'arrival_date_day_of_month'])
+
+
+def drop_column(bookings):
+    """ remove the redundant columns """
+    bookings.drop(
+        columns=['is_canceled', 'lead_time', 'arrival_date_month', 'arrival_date_week_number', 'meal', 'market_segment',
+                 'reserved_room_type', 'distribution_channel', 'previous_cancellations',
+                 'previous_bookings_not_canceled',
+                 'assigned_room_type', 'booking_changes', 'deposit_type', 'agent', 'company', 'days_in_waiting_list',
+                 'is_repeated_guest', 'customer_type', 'required_car_parking_spaces', 'total_of_special_requests'],
+        inplace=True)
 
 
 def change_datatype(bookings):
-    # convert arrival_date_year to datetime datatype
+    """ convert arrival_date_year to datetime datatype"""
     bookings['arrival_date'] = pd.to_datetime(bookings['arrival_date'])
     bookings['reservation_status_date'] = pd.to_datetime(bookings['reservation_status_date'])
     bookings['children'] = bookings['children'].astype(int)
@@ -35,46 +54,12 @@ def change_datatype(bookings):
 def clean_data(bookings):
     fillnull(bookings)
     change_date(bookings)
+    drop_column(bookings)
     change_datatype(bookings)
+    drop_duplicate(bookings)
 
 
 if __name__ == "__main__":
     hotel_data = pd.read_csv(r'hotel_bookings.csv', encoding='utf-8')
     clean_data(hotel_data)
-    hotel_data.to_csv(r'Submission/datasets/clean_hotel.csv', index=False)
-=======
-#by Hassanat Awodipe, Tabatha Correa and Tamsir Jobe
-
-#This section reads and cleans the given dataset, removing lines where it finds  blanks in important 
-# information.
-
-import pandas as pd
-
-
-def replace_null(columnNames):
-    #Replaces null values in given column to 0
-    for c in columnNames:
-        df[columnNames] = df[columnNames].fillna(0)
-
-def drop_column(columnNames):
-    #Removes the given columns
-    for c in columnNames:
-        df.drop(columnNames, axis=1, inplace=True)
-
-
-
-#reads the csv
-df = pd.read_csv('hotel_bookings.csv')
-
-#replaces the null values in these columns to 0 as to not remove unintencional rows
-replace_null(['agent','company','children'])
-
-#removes all columns we will not be using 
-
-#drops all rows that contain null variables
-new_df = df.dropna()
-
-#saves new data frame into csv file
-new_df.to_csv('hotel_bookings_clean.csv',index=False)
-
->>>>>>> main
+    hotel_data.to_csv(r'Submission/datasets/hotel_bookings_clean.csv', index=False)

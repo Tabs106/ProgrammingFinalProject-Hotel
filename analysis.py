@@ -1,6 +1,7 @@
-<<<<<<< HEAD
+# by Hassanat Awodipe, Tabatha Correa and Tamsir Jobe
+
 import pandas as pd
-from utils import AdrStats, ReservationStatus, CountryStats, Families
+from utils import AdrStats, ReservationStatus, LengthStats, Countries, Families
 
 
 def analyse_adr(data):
@@ -16,8 +17,8 @@ def analyse_reservation_status(data):
 
 
 def analyse_top_countries(data):
-    top_countries = CountryStats(data)
-    top_countries.summary_csv('Submission/datasets/top_10_countries.csv')
+    top_countries = Countries(data)
+    top_countries.csv_saver('Submission/datasets/top_10_countries.csv')
     top_countries.plot_top_countries('Submission/plots/top_10_countries.pdf')
 
 
@@ -26,9 +27,16 @@ def analyse_families(data):
     families.plot_families('Submission/plots/family_pie.pdf')
 
 
+def analyse_length_stay(data):
+    length = LengthStats(data)
+    length.plot_fig('Submission/plots/length_of_stay.pdf')
+    length.summary_csv('Submission/datasets/length_of_stay.csv')
+
+
 def all_analysis(data):
     analyse_adr(data)
     analyse_reservation_status(data)
+    analyse_length_stay(data)
     analyse_top_countries(data)
     analyse_families(data)
 
@@ -36,26 +44,3 @@ def all_analysis(data):
 if __name__ == "__main__":
     hotel_data = pd.read_csv(r'Submission/datasets/clean_hotel.csv', encoding='utf-8')
     all_analysis(hotel_data)
-=======
-#by Hassanat Awodipe, Tabatha Correa and Tamsir Jobe
-
-import pandas as pd
-from utils import AdrStats, ReservationStatus, CountryStats, Families
-
-
-def analyse_length_stay(data):
-    length = LengthStats(data)
-    length.plot_families('Submission/plots/family_pie.pdf')
-
-
-def all_analysis(data):
-    analyse_length_stay(data)
-
-
-if __name__ == "__main__":
-    hotel_data = pd.read_csv(r'Submission/datasets/hotel_bookings_clean.csv', encoding='utf-8')
-    all_analysis(hotel_data)
-<<<<<<< HEAD:analysis.py
->>>>>>> main
-=======
->>>>>>> main:analysisss.py
