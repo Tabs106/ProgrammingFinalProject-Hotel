@@ -16,6 +16,12 @@ def analyse_reservation_status(data):
     reservation_data.plot_fig('Submission/plots/reservation_status.pdf')
 
 
+def analyse_length_stay(data):
+    length = LengthStats(data)
+    length.plot_fig('Submission/plots/length_of_stay.pdf')
+    length.summary_csv('Submission/datasets/length_of_stay.csv')
+
+
 def analyse_top_countries(data):
     top_countries = Countries(data)
     top_countries.csv_saver('Submission/datasets/top_10_countries.csv')
@@ -25,12 +31,6 @@ def analyse_top_countries(data):
 def analyse_families(data):
     families = Families(data)
     families.plot_families('Submission/plots/family_pie.pdf')
-
-
-def analyse_length_stay(data):
-    length = LengthStats(data)
-    length.plot_fig('Submission/plots/length_of_stay.pdf')
-    length.summary_csv('Submission/datasets/length_of_stay.csv')
 
 
 def all_analysis(data):
