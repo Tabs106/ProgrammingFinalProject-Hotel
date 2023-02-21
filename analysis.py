@@ -42,5 +42,5 @@ def all_analysis(data):
 
 
 if __name__ == "__main__":
-    hotel_data = pd.read_csv(r'Submission/datasets/clean_hotel.csv', encoding='utf-8')
+    hotel_data = pd.read_csv(r'Submission/datasets/hotel_bookings_clean.csv', encoding='utf-8')
     all_analysis(hotel_data)

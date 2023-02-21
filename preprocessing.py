@@ -17,7 +17,8 @@ def drop_duplicate(bookings):
 
 
 def change_date(bookings):
-    """ convert month name of arrival date to number from full month name"""
+    """ combine date columns into one """
+    # convert month name of arrival date to number from full month name
     arrival_month = []
     for month in bookings['arrival_date_month']:
         month_num = list(calendar.month_name).index(month)
@@ -45,13 +46,14 @@ def drop_column(bookings):
 
 
 def change_datatype(bookings):
-    """ convert arrival_date_year to datetime datatype"""
+    """ convert attributes to the right datatype"""
     bookings['arrival_date'] = pd.to_datetime(bookings['arrival_date'])
     bookings['reservation_status_date'] = pd.to_datetime(bookings['reservation_status_date'])
     bookings['children'] = bookings['children'].astype(int)
 
 
 def clean_data(bookings):
+    """ combines all cleaning functions """
     fillnull(bookings)
     change_date(bookings)
     drop_column(bookings)

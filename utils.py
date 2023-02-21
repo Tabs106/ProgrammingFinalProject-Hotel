@@ -40,7 +40,7 @@ class AdrStats:
         data_wo = self.bookings.drop(self.bookings[self.bookings['adr'] > 5000].index)
 
         plt.figure(figsize=(8, 6))
-        ax = sns.violinplot(data=data_wo, x='hotel', y='adr', order=order, color=color);
+        ax = sns.violinplot(data=data_wo, x='hotel', y='adr', order=order, color=color)
 
         # remove chart junks
         ax.spines['top'].set_visible(False)
@@ -76,18 +76,17 @@ class ReservationStatus:
     def plot_fig(self, filename):
         """ create combined column charts for the reservation status """
         plt.figure(figsize=(8, 6))
-
         ax = sns.countplot(data=self.bookings, x='hotel', hue='reservation_status', order=order)
+
+        # label the bars directly
         for container in ax.containers:
             ax.bar_label(container)
 
-        # remove chart junks
         ax.axes.get_yaxis().set_visible(False)
         ax.spines['top'].set_visible(False)
         ax.spines['right'].set_visible(False)
         ax.spines['left'].set_visible(False)
 
-        # label axes
         plt.xlabel('Hotel')
         plt.title('Reservation Status', fontsize=16)
         plt.legend(frameon=False)
@@ -101,7 +100,7 @@ class ReservationStatus:
 
 
 class LengthStats:
-    """ analyse the number of nights spent in the hotels """
+    """ analyse the total number of nights spent in the hotels in 2016 and 2017 """
     def __init__(self, hotel_data):
         self.bookings = hotel_data
 
@@ -113,10 +112,11 @@ class LengthStats:
 
     def plot_fig(self, filename):
         """ create line plots for number of nights """
-        plt.figure(figsize=(12, 8))
         l_data = self.compute_stats()
-        # get months from arrival_date column
+        # extract months from arrival_date
         x = self.bookings['arrival_date'].dt.month
+
+        plt.figure(figsize=(12, 8))
         ax = sns.lineplot(x=x, y="full_length", hue="hotel", errorbar=None, data=l_data)
 
         ax.spines['top'].set_visible(False)
@@ -137,7 +137,7 @@ class LengthStats:
         length_stay_16_17['month'] = length_stay_16_17['arrival_date'].dt.month
         length_stay_16_17 = length_stay_16_17.groupby(['year', 'hotel', 'month'])['full_length'].mean()
         length_stay_16_17 = pd.DataFrame(length_stay_16_17).reset_index()
-        length_stay_16_17.to_csv(filename)
+        length_stay_16_17.to_csv(filename, index=False)
 
 
 class Countries:
@@ -153,7 +153,7 @@ class Countries:
         return origin_counts
 
     def plot_top_countries(self, filename):
-        """ create  vertical bar chart for countries """
+        """ create  horizontal bar chart for countries """
         y = self.country_stats()['country']
         x = self.country_stats()['count']
         ax = sns.barplot(x=x, y=y, color=color)
